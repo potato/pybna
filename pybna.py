@@ -109,11 +109,14 @@ if __name__ == '__main__':
         for (k, v) in tokens.items():
             print '%-24s%-24s' % ('%s (%s)' % (k, v[2]), v[0])
     elif options.generate:
-        t = Token()
-        tmp = tokens[args[0]]
-        t.set_token(tmp[0], tmp[1], tmp[2])
-        t.get_time_offset()
-        print 'Password for %s: %s' % (args[0], t.get_password())
+        if args[0] not in tokens.keys():
+            print '[!] Unknown token name'
+        else:
+            t = Token()
+            tmp = tokens[args[0]]
+            t.set_token(tmp[0], tmp[1], tmp[2])
+            t.get_time_offset()
+            print 'Password for %s: %s' % (args[0], t.get_password())
     else:
         parser.print_help()
     f.close()
