@@ -3,7 +3,7 @@ PYBNA
 
 ### Description
 
-pybna is a battle.net authenticator token generator, based on cheald's FlexAuth <https://github.com/cheald/FlexAuth>
+pybna is a battle.net authenticator token generator, based on cheald's FlexAuth (<https://github.com/cheald/FlexAuth>)
 
 ### Installation
 
@@ -12,13 +12,13 @@ pybna is a battle.net authenticator token generator, based on cheald's FlexAuth 
 
 ### Usage
 
-`pybna.py <option> <token_name>`
+`pybna.py <option> <token_name>
   -h, --help            show this help message and exit
   -n, --new             request new token from server
   -g, --generate        generate password for existing token
   -l, --list            get a list of existing tokens
   -r REGION, --region=REGION
-                        set the region (default: eu)
+                        set the region (default: eu)`
 
 ### License
 
