@@ -12,13 +12,13 @@ pybna is a battle.net authenticator token generator, based on cheald's FlexAuth 
 
 ### Usage
 
-`pybna.py <option> <token_name>
-  -h, --help            show this help message and exit
-  -n, --new             request new token from server
-  -g, --generate        generate password for existing token
-  -l, --list            get a list of existing tokens
-  -r REGION, --region=REGION
-                        set the region (default: eu)`
+    pybna.py <option> <token_name>
+        -h, --help            show this help message and exit
+        -n, --new             request new token from server
+        -g, --generate        generate password for existing token
+        -l, --list            get a list of existing tokens
+        -r REGION, --region=REGION
+                        set the region (default: eu)
 
 ### License
 
