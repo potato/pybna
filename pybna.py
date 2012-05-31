@@ -74,6 +74,7 @@ class Token(object):
         self.offset = int(time.time() * 1000) - sum(ord(res[7 - i]) << (i * 8) for i in range(8))
 
     def get_password(self):
+        validity = (30 - int(time.time() + self.offset / 1000 ) % 30) - 1
         t = (int(time.time() * 1000) + self.offset) / 30000
         src = bytearray([0, 0, 0, 0] + [c for c in struct.pack('>L', t)])
         key = bytearray(self.secret.decode('hex'))
@@ -82,12 +83,13 @@ class Token(object):
         auth = str(raw_hmac[pos:pos+4])
         tmp = struct.unpack('>l', auth)[0]
         code = (tmp & 0x7FFFFFFF) % (10**8)
-        return code
+        return (code, validity)
 
 if __name__ == '__main__':
     usage = 'usage: %prog <option> <token_name>'
     parser = OptionParser(usage)
     parser.add_option('-n', '--new', action='store_true', help='request new token from server', default=False)
+    parser.add_option('-d', '--delete', action='store_true', help='delete the token', default=False)
     parser.add_option('-g', '--generate', action='store_true', help='generate password for existing token', default=False)
     parser.add_option('-l', '--list', action='store_true', help='get a list of existing tokens', default=False)
     parser.add_option('-r', '--region', dest='region', help='set the region (default: %default)', default='eu')
@@ -104,6 +106,15 @@ if __name__ == '__main__':
         t.generate()
         writer = csv.writer(f)
         writer.writerow([args[0], t.serial, t.secret, t.region])
+    elif options.delete:
+        if args[0] not in tokens.keys():
+            print '[!] Unknown token name'
+        else:
+            del(tokens[args[0]])
+            f.truncate(0)
+            writer = csv.writer(f)
+            for (k,v) in tokens.items():
+                writer.writerow([args[0]] + tokens[args[0]])
     elif options.list:
         print '%-24s%-24s' % ('Token name (region)', 'Token serial')
         for (k, v) in tokens.items():
@@ -116,7 +127,8 @@ if __name__ == '__main__':
             tmp = tokens[args[0]]
             t.set_token(tmp[0], tmp[1], tmp[2])
             t.get_time_offset()
-            print 'Password for %s: %s' % (args[0], t.get_password())
+            pw = t.get_password()
+            print 'Password for %s: %s (valid for %d seconds)' % (args[0], pw[0], pw[1])
     else:
         parser.print_help()
     f.close()
